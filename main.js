@@ -43,7 +43,7 @@ function myCos(a, b) {
 function cosSort(a, b) {
     var cosa = myCos(vec0, a);
     var cosb = myCos(vec0, b);
-    return cosb - cosa;
+    return cosa - cosb;
 }
 
 function crossProduct(a, b, c) {
@@ -52,20 +52,20 @@ function crossProduct(a, b, c) {
 
 function determineConvexHull(points) {
     var untreatedPoints = points;
-    untreatedPoints.sort(function (a, b) { return a.y - b.y });
+    untreatedPoints.sort(function (a, b) { return b.y - a.y });
     var hullPoints = [];
-    hullPoints.push(untreatedPoints[0]);
-    vec0 = untreatedPoints[0];
-    untreatedPoints.shift();
+    hullPoints.push(untreatedPoints[untreatedPoints.length-1]);
+    vec0 = untreatedPoints[untreatedPoints.length - 1];
+    untreatedPoints.pop();
     untreatedPoints.sort(cosSort);
-    hullPoints.push(untreatedPoints[0]);
-    untreatedPoints.shift();
+    hullPoints.push(untreatedPoints[untreatedPoints.length - 1]);
+    untreatedPoints.pop();
     while (untreatedPoints.length > 0) {
-        while (crossProduct(hullPoints[hullPoints.length - 2], hullPoints[hullPoints.length - 1], untreatedPoints[0]) < 0) {
+        while (crossProduct(hullPoints[hullPoints.length - 2], hullPoints[hullPoints.length - 1], untreatedPoints[untreatedPoints.length - 1]) < 0) {
             hullPoints.pop();
         }
-        hullPoints.push(untreatedPoints[0]);
-        untreatedPoints.shift();
+        hullPoints.push(untreatedPoints[untreatedPoints.length - 1]);
+        untreatedPoints.pop();
     }
     return hullPoints;
 }
