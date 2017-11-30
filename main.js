@@ -50,13 +50,29 @@ function crossProduct(a, b, c) {
     return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
+function findIndexOfYMin(points) {
+    var i = 0;
+    var indexYmin = 0;
+    for (i = 0; i < points.length; i++) {
+        if (points[i].y < points[indexYmin].y) {
+            indexYmin = i;
+        }
+        else {
+            if (points[i].y == points[indexYmin].y && points[i].x < points[indexYmin].x) {
+                indexYmin = i;
+            }
+        }
+    }
+    return indexYmin;
+}
+
 function determineConvexHull(points) {
     var untreatedPoints = points;
-    untreatedPoints.sort(function (a, b) { return b.y - a.y });
     var hullPoints = [];
-    hullPoints.push(untreatedPoints[untreatedPoints.length-1]);
-    vec0 = untreatedPoints[untreatedPoints.length - 1];
-    untreatedPoints.pop();
+    var indexYmin = findIndexOfYMin(untreatedPoints);
+    hullPoints.push(untreatedPoints[indexYmin]);
+    vec0 = untreatedPoints[indexYmin];
+    untreatedPoints.splice(indexYmin, 1);
     untreatedPoints.sort(cosSort);
     hullPoints.push(untreatedPoints[untreatedPoints.length - 1]);
     untreatedPoints.pop();
